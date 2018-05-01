@@ -79,7 +79,6 @@ public class ChallengeApplicationTests {
                 .as("should increment calls field between API call, initially %s, got %s after the next API call", curr,
                         next)
                 .isEqualTo(0);
-        System.out.println(curr + " " + next);
     }
 
     /**
@@ -101,7 +100,6 @@ public class ChallengeApplicationTests {
         // joins all
         phaser.arriveAndAwaitAdvance();
         final BigInteger last = this.nextCalls();
-        System.out.println(first + " " + last);
         assertThat(last.compareTo(first.add(BigInteger.valueOf(TRIES + 1)))).as(
                 "should increment calls between concurrent API calls, initial value %s, after %d concurrent API calls, got %s",
                 first, TRIES, last).isEqualTo(0);
