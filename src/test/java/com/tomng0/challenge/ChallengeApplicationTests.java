@@ -130,10 +130,10 @@ public class ChallengeApplicationTests {
                 .isEqualTo(expectedOffset);
         assertThat(got.getYear()).as("expect same year").isEqualTo(expected.getYear());
         assertThat(got.getMonth()).as("expect same month").isEqualTo(expected.getMonth());
-        assertThat(got.getDayOfMonth()).isEqualTo(expected.getDayOfMonth());
-        assertThat(got.getHour()).isEqualTo(expected.getHour());
-        assertThat(got.getMinute()).isEqualTo(expected.getMinute());
-        assertThat(got.getSecond()).isCloseTo(expected.getSecond(), Offset.offset(10));
+        assertThat(got.getDayOfMonth()).as("expect same day of month").isEqualTo(expected.getDayOfMonth());
+        assertThat(got.getHour()).as("expect same hour").isEqualTo(expected.getHour());
+        assertThat(got.getMinute()).as("expect same minute").isEqualTo(expected.getMinute());
+        assertThat(got.getSecond()).as("expect same second").isCloseTo(expected.getSecond(), Offset.offset(10));
     }
 
 }
