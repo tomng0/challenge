@@ -2,7 +2,7 @@ package com.tomng0.challenge.model;
 
 import java.math.BigInteger;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,7 @@ public class Now implements Timestamp {
 
     @JsonProperty(access = Access.READ_ONLY)
     public String getTimestamp() {
-        return LocalDateTime.now().atZone(ZoneId.of("EST", ZoneId.SHORT_IDS)).toString();
+        return OffsetDateTime.ofInstant(Instant.now(), ZoneId.of("EST", ZoneId.SHORT_IDS)).toString();
     }
 
     public BigInteger getCalls() {

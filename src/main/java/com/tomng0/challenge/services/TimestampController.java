@@ -14,9 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class TimestampController {
     private volatile BigInteger calls = BigInteger.valueOf(0);
 
+    /**
+     * Timestamp service is at /timestamp/now
+     */
     @RequestMapping(method = RequestMethod.GET, path = "now", headers = "Accept=application/json")
-    public synchronized Timestamp getNow() {
-        this.calls = this.calls.add(BigInteger.ONE);
-        return new Now(this.calls);
+    public Timestamp getNow() {
+        Timestamp now = null;
+        synchronized (this) {
+            this.calls = this.calls.add(BigInteger.ONE);
+            now = new Now(this.calls);
+        }
+        return now;
     }
 }

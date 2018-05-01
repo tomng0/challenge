@@ -1,13 +1,16 @@
 package com.tomng0.challenge;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.Phaser;
 
 import com.tomng0.challenge.model.Now;
 
+import org.assertj.core.data.Offset;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +122,20 @@ public class ChallengeApplicationTests {
      */
     @Test
     public void shouldTimestampInEST() {
-        final String time = nextTimestamp();
-        String timeZone = OffsetDateTime.parse(time).getOffset().getId();
-        assertThat(timeZone).as("expect time zone to be EST(\"-05:00\"), expected %s, got %s", "-05:00", timeZone)
-                .isEqualTo("-05:00");
+        final OffsetDateTime got = OffsetDateTime.parse(nextTimestamp());
+        final OffsetDateTime expected = OffsetDateTime.ofInstant(Instant.now(), ZoneId.of("EST", ZoneId.SHORT_IDS));
+
+        final ZoneId expectedOffset = expected.getOffset().normalized();
+        final ZoneId gotOffset = got.getOffset().normalized();
+        assertThat(gotOffset)
+                .as("expect time zone to be EST(\"-05:00\"), expected %s, got %s", expectedOffset, gotOffset)
+                .isEqualTo(expectedOffset);
+        assertThat(got.getYear()).as("expect same year").isEqualTo(expected.getYear());
+        assertThat(got.getMonth()).as("expect same month").isEqualTo(expected.getMonth());
+        assertThat(got.getDayOfMonth()).isEqualTo(expected.getDayOfMonth());
+        assertThat(got.getHour()).isEqualTo(expected.getHour());
+        assertThat(got.getMinute()).isEqualTo(expected.getMinute());
+        assertThat(got.getSecond()).isCloseTo(expected.getSecond(), Offset.offset(10));
     }
 
 }
